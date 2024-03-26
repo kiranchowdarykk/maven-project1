@@ -17,10 +17,22 @@ pipeline {
                 sh 'mvn clean install'
             }
         }
-        stage('Deploy') {
+        stage('Dev-Deploy') {
             steps {
-                echo 'Hello Deploy'
+                echo 'Hello Docker Deploy'
+                deploy adapters: [tomcat9(credentialsId: 'ff24cf31-9aac-4db8-99c2-c21f86a799da', path: '', url: 'http://192.168.75.131:8082/')], contextPath: 'devops101.war', war: '**/*.war' 
+                  }
+        }
+        stage('NonPrd-Deploy') {
+            steps {
+                echo 'Hello Linux Deploy'
                 deploy adapters: [tomcat9(credentialsId: 'ff24cf31-9aac-4db8-99c2-c21f86a799da', path: '', url: 'http://192.168.75.131:8081/')], contextPath: 'devops101.war', war: '**/*.war' 
+                  }
+        }
+        stage('Prod-Deploy') {
+            steps {
+                echo 'Hello AWS Deploy'
+                deploy adapters: [tomcat9(credentialsId: 'ff24cf31-9aac-4db8-99c2-c21f86a799da', path: '', url: 'http://43.205.216.62:8080/')], contextPath: 'devops101.war', war: '**/*.war' 
                   }
         }
 }
